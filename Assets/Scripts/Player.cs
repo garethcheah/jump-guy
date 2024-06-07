@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private static string runConditionName = "isRunning";
+    private static string groundedConditionName = "grounded";
     private Animator playerAnimator;
     private SpriteRenderer playerSR;
 
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         MovePlayer();
+        Jump();
     }
 
     private void MovePlayer()
@@ -46,6 +48,13 @@ public class Player : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
         {
             playerAnimator.SetBool(runConditionName, false);
+        }
+    }
+
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            playerAnimator.SetBool(groundedConditionName, false);
         }
     }
 }
