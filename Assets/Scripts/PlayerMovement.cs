@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private static string runConditionName = "isRunning";
     private static string groundedConditionName = "isGrounded";
@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
-
         MovePlayer();
 
 
@@ -61,7 +60,7 @@ public class Player : MonoBehaviour
 
     private void JumpPlayer()
     {
-        playerRB.velocity = new Vector2(playerRB.velocity.x * runSpeed, jumpPower);
+        playerRB.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         isGrounded = false;
         playerAnimator.SetBool(groundedConditionName, isGrounded);
     }
