@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private static string runConditionName = "isRunning";
     private Animator playerAnimator;
+    private SpriteRenderer playerSR;
 
     [SerializeField]
     private float runSpeed = 5f;
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
+        playerSR = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -36,6 +38,7 @@ public class Player : MonoBehaviour
         // Initiate running animation if key down is detected
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
         {
+            playerSR.flipX = Input.GetKeyDown(KeyCode.LeftArrow);
             playerAnimator.SetBool(runConditionName, true);
         }
 
