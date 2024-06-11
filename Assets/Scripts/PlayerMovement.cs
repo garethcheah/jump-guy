@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             JumpPlayer();
         }
@@ -44,15 +44,15 @@ public class PlayerMovement : MonoBehaviour
         // Apply player movement
         playerRB.velocity = new Vector2(horizontalInput * runSpeed, playerRB.velocity.y);
 
-        // Initiate running animation if key down is detected
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        // Initiate running animation if horizontal input is detected
+        if (Mathf.Abs(horizontalInput) > 0f)
         {
-            playerSR.flipX = Input.GetKeyDown(KeyCode.LeftArrow);
+            playerSR.flipX = Mathf.Sign(horizontalInput) < 0;
             playerAnimator.SetBool(runConditionName, true);
         }
 
-        // Stop running animation if key up is detected
-        if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+        // Stop running animation if no horizontal input
+        if (Mathf.Abs(horizontalInput) == 0f)
         {
             playerAnimator.SetBool(runConditionName, false);
         }
