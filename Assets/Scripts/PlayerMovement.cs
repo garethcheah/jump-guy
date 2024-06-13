@@ -70,4 +70,12 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = true;
         playerAnimator.SetBool(groundedConditionName, isGrounded);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Collision with obstacle detected.");
+        }
+    }
 }
