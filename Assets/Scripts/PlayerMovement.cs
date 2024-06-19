@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -11,12 +13,11 @@ public class PlayerMovement : MonoBehaviour
     private Animator playerAnimator;
     private SpriteRenderer playerSR;
     private Rigidbody2D playerRB;
+    private GameObject failIndicator;
 
-    [SerializeField]
-    private float runSpeed = 5f;
-
-    [SerializeField]
-    private float jumpPower = 10f;
+    [SerializeField] private float runSpeed = 5f;
+    [SerializeField] private float jumpPower = 10f;
+    [SerializeField] private float timeForActiveIndicators = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerSR = GetComponent<SpriteRenderer>();
         playerRB = GetComponent<Rigidbody2D>();
+        failIndicator = transform.Find("Fail Indicator").GameObject();
+
+        failIndicator.SetActive(false);
     }
 
     // Update is called once per frame
@@ -36,6 +40,24 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             JumpPlayer();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        isGrounded = true;
+        playerAnimator.SetBool(groundedConditionName, isGrounded);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision with obstacle detected.");
+
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            failIndicator.SetActive(true);
+            playerSR.color = UnityEngine.Color.red;
+            Invoke("TurnOffFailIndicator", timeForActiveIndicators);
         }
     }
 
@@ -65,17 +87,9 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool(groundedConditionName, isGrounded);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void TurnOffFailIndicator()
     {
-        isGrounded = true;
-        playerAnimator.SetBool(groundedConditionName, isGrounded);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            Debug.Log("Collision with obstacle detected.");
-        }
+        failIndicator.SetActive(false);
+        playerSR.color = UnityEngine.Color.white;
     }
 }
