@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerSR = GetComponent<SpriteRenderer>();
         playerRB = GetComponent<Rigidbody2D>();
-        failIndicator = transform.Find("Fail Indicator").GameObject();
+        failIndicator = transform.Find("Damage Indicator").GameObject();
 
         failIndicator.SetActive(false);
     }
@@ -45,19 +45,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        isGrounded = true;
-        playerAnimator.SetBool(groundedConditionName, isGrounded);
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            playerAnimator.SetBool(groundedConditionName, isGrounded);
+        }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collision with obstacle detected.");
 
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Enemy"))
         {
-            failIndicator.SetActive(true);
-            playerSR.color = UnityEngine.Color.red;
-            Invoke("TurnOffFailIndicator", timeForActiveIndicators);
+            TurnOnDamageIndicator();
+            Invoke("TurnOffDamageIndicator", timeForActiveIndicators);
         }
     }
 
@@ -87,7 +90,13 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool(groundedConditionName, isGrounded);
     }
 
-    private void TurnOffFailIndicator()
+    private void TurnOnDamageIndicator()
+    {
+        failIndicator.SetActive(true);
+        playerSR.color = UnityEngine.Color.red;
+    }
+
+    private void TurnOffDamageIndicator()
     {
         failIndicator.SetActive(false);
         playerSR.color = UnityEngine.Color.white;
