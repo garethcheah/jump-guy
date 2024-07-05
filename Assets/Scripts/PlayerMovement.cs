@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private static string runConditionName = "isRunning";
-    private static string groundedConditionName = "isGrounded";
-    private bool isGrounded = true;
-    private float horizontalInput;
-    private Animator playerAnimator;
-    private SpriteRenderer playerSR;
-    private Rigidbody2D playerRB;
-    private GameObject failIndicator;
+    private static string _runConditionName = "isRunning";
+    private static string _groundedConditionName = "isGrounded";
+    private bool _isGrounded = true;
+    private float _horizontalInput;
+    private Animator _playerAnimator;
+    private SpriteRenderer _playerSR;
+    private Rigidbody2D _playerRB;
+    private GameObject _failIndicator;
+    private SceneManager _sceneManager;
 
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private float jumpPower = 10f;
@@ -22,22 +24,23 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerAnimator = GetComponent<Animator>();
-        playerSR = GetComponent<SpriteRenderer>();
-        playerRB = GetComponent<Rigidbody2D>();
-        failIndicator = transform.Find("Damage Indicator").GameObject();
+        _playerAnimator = GetComponent<Animator>();
+        _playerSR = GetComponent<SpriteRenderer>();
+        _playerRB = GetComponent<Rigidbody2D>();
+        _failIndicator = transform.Find("Damage Indicator").GameObject();
+        _sceneManager = FindObjectOfType<SceneManager>();
 
-        failIndicator.SetActive(false);
+        _failIndicator.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        _horizontalInput = Input.GetAxis("Horizontal");
         MovePlayer();
 
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
             JumpPlayer();
         }
@@ -47,10 +50,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
-            playerAnimator.SetBool(groundedConditionName, isGrounded);
+            _isGrounded = true;
+            _playerAnimator.SetBool(_groundedConditionName, _isGrounded);
         }
-        
+        else if (collision.gameObject.CompareTag("Collectible"))
+        {
+            collision.GameObject().SetActive(false);
+        }
+        else if (collision.gameObject.CompareTag("PlatformStart"))
+        {
+            _sceneManager.GenerateNextPlatform(collision.transform.parent.GameObject());
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -67,38 +77,38 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         // Apply player movement
-        playerRB.velocity = new Vector2(horizontalInput * runSpeed, playerRB.velocity.y);
+        _playerRB.velocity = new Vector2(_horizontalInput * runSpeed, _playerRB.velocity.y);
 
         // Initiate running animation if horizontal input is detected
-        if (Mathf.Abs(horizontalInput) > 0f)
+        if (Mathf.Abs(_horizontalInput) > 0f)
         {
-            playerSR.flipX = Mathf.Sign(horizontalInput) < 0;
-            playerAnimator.SetBool(runConditionName, true);
+            _playerSR.flipX = Mathf.Sign(_horizontalInput) < 0;
+            _playerAnimator.SetBool(_runConditionName, true);
         }
 
         // Stop running animation if no horizontal input
-        if (Mathf.Abs(horizontalInput) == 0f)
+        if (Mathf.Abs(_horizontalInput) == 0f)
         {
-            playerAnimator.SetBool(runConditionName, false);
+            _playerAnimator.SetBool(_runConditionName, false);
         }
     }
 
     private void JumpPlayer()
     {
-        playerRB.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        isGrounded = false;
-        playerAnimator.SetBool(groundedConditionName, isGrounded);
+        _playerRB.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        _isGrounded = false;
+        _playerAnimator.SetBool(_groundedConditionName, _isGrounded);
     }
 
     private void TurnOnDamageIndicator()
     {
-        failIndicator.SetActive(true);
-        playerSR.color = UnityEngine.Color.red;
+        _failIndicator.SetActive(true);
+        _playerSR.color = UnityEngine.Color.red;
     }
 
     private void TurnOffDamageIndicator()
     {
-        failIndicator.SetActive(false);
-        playerSR.color = UnityEngine.Color.white;
+        _failIndicator.SetActive(false);
+        _playerSR.color = UnityEngine.Color.white;
     }
 }
