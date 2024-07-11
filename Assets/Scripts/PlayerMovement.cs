@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer _playerSR;
     private Rigidbody2D _playerRB;
     private GameObject _failIndicator;
-    private GameManager _sceneManager;
+    private GameManager _gameManager;
 
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private float jumpPower = 10f;
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         _playerSR = GetComponent<SpriteRenderer>();
         _playerRB = GetComponent<Rigidbody2D>();
         _failIndicator = transform.Find("Damage Indicator").GameObject();
-        _sceneManager = FindObjectOfType<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
 
         _failIndicator.SetActive(false);
     }
@@ -56,10 +56,11 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.gameObject.CompareTag("Collectible"))
         {
             collision.GameObject().SetActive(false);
+            _gameManager.UpdateCollectibleCount();
         }
         else if (collision.gameObject.CompareTag("PlatformStart"))
         {
-            _sceneManager.GenerateNextPlatform(collision.transform.parent.GameObject());
+            _gameManager.GenerateNextPlatform(collision.transform.parent.GameObject());
         }
     }
 
@@ -70,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Enemy"))
         {
             TurnOnDamageIndicator();
+            _gameManager.UpdateLastDamagedTime();
             Invoke("TurnOffDamageIndicator", timeForActiveIndicators);
         }
     }

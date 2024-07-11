@@ -8,7 +8,6 @@ TagManager:
   - Obstacle
   - Collectible
   - Enemy
-  - EnemyBoundary
   - PlatformStart
   layers:
   - Default

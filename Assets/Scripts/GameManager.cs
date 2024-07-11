@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private StatsManager _statsManager;
     [SerializeField] private List<GameObject> _platformTemplates = new List<GameObject>();
     [SerializeField] private List<GameObject> _activePlatforms = new List<GameObject>();
     [SerializeField] private GameObject _backgroundTemplate;
@@ -60,6 +61,16 @@ public class GameManager : MonoBehaviour
         {
             GenerateNextBackground(_activeBackgrounds[_activeBackgrounds.Count - 1]);
         }
+    }
+
+    public void UpdateCollectibleCount()
+    {
+        _statsManager.UpdateCollectibleCount();
+    }
+
+    public void UpdateLastDamagedTime()
+    {
+        _statsManager.UpdateLastDamagedTime();
     }
 
     private void GenerateNextBackground(GameObject currentBackground)
