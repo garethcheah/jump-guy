@@ -1528,7 +1528,7 @@ GameObject:
   - component: {fileID: 686363692}
   - component: {fileID: 686363693}
   m_Layer: 0
-  m_Name: Scene Manager
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1558,7 +1558,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 686363691}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec7d60aa2c3b124fa7b68a71f4147ef, type: 3}
+  m_Script: {fileID: 11500000, guid: c674dbfcca070c34db90ca81364d2e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _platformTemplates:

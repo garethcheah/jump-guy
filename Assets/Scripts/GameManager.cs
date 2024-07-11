@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SceneManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _platformTemplates = new List<GameObject>();
     [SerializeField] private List<GameObject> _activePlatforms = new List<GameObject>();
@@ -108,7 +108,7 @@ public class SceneManager : MonoBehaviour
         for (int i = 0; i < _cleanUpCountBackgrounds; i++)
         {
             Destroy(_activeBackgrounds[i]);
-        }   
+        }
 
         _activeBackgrounds.RemoveRange(0, _cleanUpCountBackgrounds);
 

@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer _playerSR;
     private Rigidbody2D _playerRB;
     private GameObject _failIndicator;
-    private SceneManager _sceneManager;
+    private GameManager _sceneManager;
 
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private float jumpPower = 10f;
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         _playerSR = GetComponent<SpriteRenderer>();
         _playerRB = GetComponent<Rigidbody2D>();
         _failIndicator = transform.Find("Damage Indicator").GameObject();
-        _sceneManager = FindObjectOfType<SceneManager>();
+        _sceneManager = FindObjectOfType<GameManager>();
 
         _failIndicator.SetActive(false);
     }
