@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemyRB.velocity.x == 0f)
+        if (enemyRB.velocity.x == 0.0f)
         {
             MoveEnemy();
         }

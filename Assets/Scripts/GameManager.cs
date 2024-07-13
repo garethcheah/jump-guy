@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -71,6 +72,11 @@ public class GameManager : MonoBehaviour
     public void UpdateLastDamagedTime()
     {
         _statsManager.UpdateLastDamagedTime();
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 
     private void GenerateNextBackground(GameObject currentBackground)
